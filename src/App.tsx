@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
+import Prototype from './prototype/Prototype';
 
 function App() {
   return (
-    <div>App</div>
+    <div>
+      <Prototype />
+    </div>
   );
 }
 
