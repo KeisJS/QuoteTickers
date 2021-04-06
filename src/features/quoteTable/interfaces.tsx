@@ -12,3 +12,7 @@ export interface QuoteTickerSymbol {
   baseCurrency: string,
   feeCurrency: string,
 }
+
+export interface QuoteTickerSymbolMap {
+  [id: string]: QuoteTickerSymbol,
+}

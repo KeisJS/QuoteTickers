@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuoteTicker } from './interfaces';
+import { QuoteTicker, QuoteTickerSymbol } from './interfaces';
 import quoteTableFields from './tableFields';
 
 export interface QuoteTableViewProps {
@@ -7,7 +7,10 @@ export interface QuoteTableViewProps {
   previousData: {
     [symbolId: string]: QuoteTicker
   },
-  themeDark?: boolean
+  themeDark?: boolean,
+  symbolsMap: {
+    [id: string]: QuoteTickerSymbol
+  }
 }
 
 export const quoteTableClasses = {
@@ -18,7 +21,7 @@ export const quoteTableClasses = {
   }
 }
 
-export default function QuoteTableView({ data, previousData, themeDark }: QuoteTableViewProps) {
+export default function QuoteTableView({ data, previousData, themeDark, symbolsMap }: QuoteTableViewProps) {
   return (
     <table className={ `table table-striped ${ themeDark ? quoteTableClasses.dark.table : '' }` }>
       <thead>
@@ -33,19 +36,26 @@ export default function QuoteTableView({ data, previousData, themeDark }: QuoteT
         <tr key={ ticker.symbol }>
           { quoteTableFields.map(tableField => {
             let extClasses = '';
-            if (previousData[ticker.symbol]) {
-              switch (tableField.compare(ticker, previousData[ticker.symbol])) {
-                case -1:
-                  extClasses = quoteTableClasses.cellValueDawn;
-                  break;
-                case 1:
-                  extClasses = quoteTableClasses.cellValueUp;
-                  break;
+            let value = ticker[tableField.field];
+            
+            if (tableField.field === 'symbol') {
+              let symbol = symbolsMap[ticker.symbol];
+              value = `${symbol.baseCurrency} / ${symbol.feeCurrency}`;
+            } else {
+              if (previousData[ticker.symbol]) {
+                switch (tableField.compare(ticker, previousData[ticker.symbol])) {
+                  case -1:
+                    extClasses = quoteTableClasses.cellValueDawn;
+                    break;
+                  case 1:
+                    extClasses = quoteTableClasses.cellValueUp;
+                    break;
+                }
               }
             }
             
             return (
-              <td key={ tableField.field } className={ extClasses }>{ ticker[tableField.field] }</td>
+              <td key={ tableField.field } className={ extClasses }>{ value }</td>
             )
           })}
         </tr>

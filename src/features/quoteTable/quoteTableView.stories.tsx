@@ -1,7 +1,8 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import QuoteTableView, { QuoteTableViewProps } from './QuoteTableView';
-import { getMockQuoteTicker } from './utils';
+import { getMockQuoteTicker, getMockQuoteTickerSymbol } from './utils';
+import { QuoteTickerSymbolMap } from './interfaces';
 
 export default {
   title: 'features/QuoteTableView',
@@ -11,7 +12,15 @@ export default {
 const data = [getMockQuoteTicker(), getMockQuoteTicker(), getMockQuoteTicker()];
 const previousData = {
   [data[0].symbol]: { ...data[0], bid: '1000000', ask: '0.1' }
-}
+};
+
+const symbolsMap = data.map(ticker => {
+  return getMockQuoteTickerSymbol(ticker.symbol)
+}).reduce((map, symbol) => {
+  map[symbol.id] = symbol;
+  
+  return map;
+}, {} as QuoteTickerSymbolMap);
 
 const Template: Story<QuoteTableViewProps> = args => <QuoteTableView { ...args } />;
 
@@ -19,7 +28,8 @@ export const DefaultUse = Template.bind({});
 
 DefaultUse.args = {
   data,
-  previousData
+  previousData,
+  symbolsMap,
 }
 
 export const DarkThemeUse = Template.bind({});
@@ -28,4 +38,5 @@ DarkThemeUse.args = {
   data,
   previousData,
   themeDark: true,
+  symbolsMap,
 }
