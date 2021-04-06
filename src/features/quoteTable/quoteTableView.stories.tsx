@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import QuoteTableView, { QuoteTableViewProps } from './QuoteTableView';
-import getMockQuoteTicker from './utils/getMockQuoteTicker';
+import { getMockQuoteTicker } from './utils';
 
 export default {
   title: 'features/QuoteTableView',

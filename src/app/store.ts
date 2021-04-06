@@ -1,7 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import tickersSlice from '../features/quoteTable/store/tickersSlice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    tickers: tickersSlice.reducer
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

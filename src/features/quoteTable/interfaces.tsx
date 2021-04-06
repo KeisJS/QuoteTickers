@@ -6,3 +6,9 @@ export interface QuoteTicker {
   low: string,
   last: string,
 }
+
+export interface QuoteTickerSymbol {
+  id: string
+  baseCurrency: string,
+  feeCurrency: string,
+}
