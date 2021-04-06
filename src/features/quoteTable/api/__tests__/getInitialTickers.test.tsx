@@ -1,7 +1,7 @@
 import { QuoteTicker } from '../../interfaces';
 import { getMockQuoteTicker, getMockQuoteTickerSymbol } from 'features/quoteTable/utils';
 import getInitialTickers from '../getInitialTickers';
-import { MockWebsocket, getWebsocketMock } from '../../../../utils';
+import { getWebsocketMock } from '../../../../utils';
 import { REQUEST_IDS } from '../interfaces';
 
 describe('Test get initial tickers', () => {
