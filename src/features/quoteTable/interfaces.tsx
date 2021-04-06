@@ -16,3 +16,7 @@ export interface QuoteTickerSymbol {
 export interface QuoteTickerSymbolMap {
   [id: string]: QuoteTickerSymbol,
 }
+
+export interface QuoteTickerMap {
+  [tickerSymbol: string]: QuoteTicker
+}

@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
-import Prototype from './prototype/Prototype';
+import QuoteTable from './features/quoteTable/QuoteTableContainer';
 
 function App() {
   return (
-    <div>
-      <Prototype />
+    <div className='container-lg'>
+      <div className='row'>
+        <div className='col-12'>
+          <QuoteTable />
+        </div>
+      </div>
     </div>
   );
 }
