@@ -1,10 +1,10 @@
 import { createAction, PrepareAction } from '@reduxjs/toolkit';
-import { QuoteTicker, QuoteTickerSymbol } from '../interfaces';
+import { QuoteTicker, QuoteTickerSymbol, SortType, QuoteTickerFields } from '../interfaces';
 
 type SetUpdateTickersPayload = Map<string, QuoteTicker>;
 export interface SortPayload {
-  field: keyof QuoteTicker,
-  type: 'up' | 'down'
+  field: QuoteTickerFields,
+  type: SortType
 }
 
 interface CreateActionTickerPayload {

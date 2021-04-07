@@ -7,6 +7,8 @@ export interface QuoteTicker {
   last: string,
 }
 
+export type QuoteTickerFields = keyof QuoteTicker;
+
 export interface QuoteTickerSymbol {
   id: string
   baseCurrency: string,
@@ -20,3 +22,5 @@ export interface QuoteTickerSymbolMap {
 export interface QuoteTickerMap {
   [tickerSymbol: string]: QuoteTicker
 }
+
+export type SortType = 'up' | 'down';

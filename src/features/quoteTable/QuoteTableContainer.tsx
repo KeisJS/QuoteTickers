@@ -4,6 +4,9 @@ import { tickersSelector } from './store/selectors';
 import QuoteTableView from './QuoteTableView';
 import tickerQueue from './api/tickerQueue';
 import { tickersWs } from './api/socketConnect';
+import { getSortByField } from 'features/quoteTable/utils';
+
+const sortByLastDown = getSortByField('last', 'down');
 
 export default function QuoteTable() {
   const dispatch = useDispatch();
@@ -19,10 +22,16 @@ export default function QuoteTable() {
     }
   }, [dispatch]);
   
-  let data = tickersState.data;
+  let data = [...tickersState.data];
+  
+  data = data.sort(sortByLastDown);
   
   if (tickersState.onLimit50) {
     data = data.slice(0, 49);
+  }
+  
+  if (tickersState.sortType.field !== 'last' && tickersState.sortType.type !== 'down') {
+    data = data.sort(getSortByField(tickersState.sortType.field, tickersState.sortType.type));
   }
   
   return (
