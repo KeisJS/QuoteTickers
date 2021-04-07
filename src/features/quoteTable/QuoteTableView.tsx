@@ -1,6 +1,10 @@
-import React, { memo } from 'react';
-import { QuoteTicker, QuoteTickerSymbol } from './interfaces';
-import quoteTableFields from './tableFields';
+import React from 'react';
+import { QuoteTicker, QuoteTickerSymbol, SortParams } from './interfaces';
+import QuoteTableRow from './QuoteTableRow';
+import quoteTableClasses from './quoteTableClasse';
+import QuoteTableHead from './QuoteTableHead';
+import { AppDispatch } from '../../app/store';
+import styles from './styles.module.scss';
 
 export interface QuoteTableViewProps {
   data: QuoteTicker[],
@@ -10,65 +14,15 @@ export interface QuoteTableViewProps {
   themeDark?: boolean,
   symbolsMap: {
     [id: string]: QuoteTickerSymbol
-  }
+  },
+  sortParams: SortParams,
+  dispatch: AppDispatch
 }
 
-interface QuoteTableRow {
-  ticker: QuoteTicker,
-  previousTicker: null | QuoteTicker,
-  symbol: QuoteTickerSymbol,
-}
-
-export const quoteTableClasses = {
-  cellValueUp: 'text-success',
-  cellValueDawn: 'text-danger',
-  dark: {
-    table: 'table-dark',
-  }
-}
-
-const QuoteTableRow = memo(({ ticker, previousTicker, symbol }:QuoteTableRow ) => {
+export default function QuoteTableView({ data, previousData, themeDark, symbolsMap, sortParams, dispatch }: QuoteTableViewProps) {
   return (
-    (
-      <tr key={ ticker.symbol }>
-        { quoteTableFields.map(tableField => {
-          let extClasses = '';
-          let value = ticker[tableField.field];
-        
-          if (tableField.field === 'symbol') {
-            value = `${symbol.baseCurrency} / ${symbol.feeCurrency}`;
-          } else {
-            if (previousTicker !== null) {
-              switch (tableField.compare(ticker, previousTicker)) {
-                case -1:
-                  extClasses = quoteTableClasses.cellValueDawn;
-                  break;
-                case 1:
-                  extClasses = quoteTableClasses.cellValueUp;
-                  break;
-              }
-            }
-          }
-        
-          return (
-            <td key={ tableField.field } className={ extClasses }>{ value }</td>
-          )
-        })}
-      </tr>
-    )
-  )
-})
-
-export default function QuoteTableView({ data, previousData, themeDark, symbolsMap }: QuoteTableViewProps) {
-  return (
-    <table className={ `table table-striped ${ themeDark ? quoteTableClasses.dark.table : '' }` }>
-      <thead>
-        <tr>
-          { quoteTableFields.map(tableField => (
-            <th key={ tableField.field }>{ tableField.title }</th>
-          ))}
-        </tr>
-      </thead>
+    <table className={ `table table-striped ${ styles.quoteTable } ${ themeDark ? quoteTableClasses.dark.table : '' }` }>
+      <QuoteTableHead dispatch={ dispatch } sortParams={ sortParams } />
       <tbody>
       { data.map(ticker => {
         const previousTicker = previousData[ticker.symbol] || null;

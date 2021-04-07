@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { QuoteTicker, QuoteTickerSymbol } from '../interfaces';
-import tickersActions, { SortPayload } from './actions';
+import { QuoteTicker, QuoteTickerSymbol, SortParams } from '../interfaces';
+import tickersActions from './actions';
 
 interface TickersState {
   data: QuoteTicker[],
@@ -11,7 +11,7 @@ interface TickersState {
     [id: string]: QuoteTickerSymbol
   },
   onLimit50: boolean,
-  sortType: SortPayload,
+  sortType: SortParams,
   isDarkTheme: boolean
 }
 

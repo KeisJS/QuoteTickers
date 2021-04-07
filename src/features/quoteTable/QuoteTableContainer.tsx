@@ -11,6 +11,7 @@ const sortByLastDown = getSortByField('last', 'down');
 export default function QuoteTable() {
   const dispatch = useDispatch();
   const tickersState = useSelector(tickersSelector);
+  const sortParams = tickersState.sortType
   
   useEffect(() => {
     const ws = tickersWs();
@@ -30,9 +31,7 @@ export default function QuoteTable() {
     data = data.slice(0, 49);
   }
   
-  if (tickersState.sortType.field !== 'last' && tickersState.sortType.type !== 'down') {
-    data = data.sort(getSortByField(tickersState.sortType.field, tickersState.sortType.type));
-  }
+  data = data.sort(getSortByField(sortParams.field, sortParams.type));
   
   return (
     <QuoteTableView
@@ -40,6 +39,8 @@ export default function QuoteTable() {
       previousData={ tickersState.previousData }
       symbolsMap={ tickersState.symbols }
       themeDark={ tickersState.isDarkTheme }
+      dispatch={ dispatch }
+      sortParams={ sortParams }
     />
   )
 }

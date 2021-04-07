@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { byRole, byText } from 'testing-library-selector';
-import QuoteTableView, { quoteTableClasses, QuoteTableViewProps } from '../QuoteTableView';
+import QuoteTableView, { QuoteTableViewProps } from '../QuoteTableView';
+import quoteTableClasses from '../quoteTableClasse';
 import { getMockQuoteTicker, getMockQuoteTickerSymbol } from '../utils';
-import { QuoteTicker, QuoteTickerSymbol, QuoteTickerSymbolMap } from '../interfaces';
+import { QuoteTicker, QuoteTickerSymbol, QuoteTickerSymbolMap, SortParams } from '../interfaces';
 
 describe('Test QuoteTable', () => {
   let testTickers: QuoteTicker[];
@@ -11,6 +12,8 @@ describe('Test QuoteTable', () => {
   let testTicker: QuoteTicker;
   let testTickerSymbol: QuoteTickerSymbol;
   let testSymbolMap: QuoteTickerSymbolMap;
+  const defaultSortParams: SortParams = { type: 'down', field: 'last' };
+  const dispatch = jest.fn();
   
   beforeEach(() => {
     testTicker = getMockQuoteTicker();
@@ -25,19 +28,44 @@ describe('Test QuoteTable', () => {
   })
   
   it('Default use', () => {
-    render(<QuoteTableView data={ testTickers } previousData={{}} symbolsMap={testSymbolMap} />);
+    render(
+      <QuoteTableView
+        data={ testTickers }
+        previousData={{}}
+        symbolsMap={testSymbolMap}
+        dispatch={dispatch}
+        sortParams={defaultSortParams}
+      />
+    );
   
     expect(byText(testTicker.last).query()).toBeInTheDocument();
   });
   
   it('Test dark theme', () => {
-    render(<QuoteTableView data={ [] } previousData={{}} themeDark symbolsMap={testSymbolMap} />);
+    render(
+      <QuoteTableView
+        data={ [] }
+        previousData={{}}
+        themeDark
+        symbolsMap={testSymbolMap}
+        sortParams={defaultSortParams}
+        dispatch={dispatch}
+      />
+    );
     
     expect(byRole('table').get()).toHaveClass(quoteTableClasses.dark.table);
   });
   
   it('Test previous data', () => {
-    render(<QuoteTableView data={ testTickers } previousData={ previousData } symbolsMap={testSymbolMap} />);
+    render(
+      <QuoteTableView
+        data={ testTickers }
+        previousData={ previousData }
+        symbolsMap={testSymbolMap}
+        sortParams={defaultSortParams}
+        dispatch={dispatch}
+      />
+    );
     
     expect(byText(testTicker.bid).get()).toHaveClass(quoteTableClasses.cellValueDawn);
     expect(byText(testTicker.ask).get()).toHaveClass(quoteTableClasses.cellValueUp);

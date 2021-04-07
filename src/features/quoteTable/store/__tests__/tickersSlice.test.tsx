@@ -1,7 +1,6 @@
-import { QuoteTicker } from '../../interfaces';
+import { QuoteTicker, SortParams } from '../../interfaces';
 import tickersSlice, { initialTickersState } from '../tickersSlice';
 import { getMockQuoteTicker, getMockQuoteTickerSymbol } from '../../utils';
-import { SortPayload } from '../actions';
 
 describe('Test tickers slice', () => {
   const reducer = tickersSlice.reducer;
@@ -67,7 +66,7 @@ describe('Test tickers slice', () => {
   });
   
   it('Test set sort type', () => {
-    const testPayload: SortPayload = {
+    const testPayload: SortParams = {
       type: 'down',
       field: 'ask'
     };

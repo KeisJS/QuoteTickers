@@ -1,11 +1,7 @@
 import { createAction, PrepareAction } from '@reduxjs/toolkit';
-import { QuoteTicker, QuoteTickerSymbol, SortType, QuoteTickerFields } from '../interfaces';
+import { QuoteTicker, QuoteTickerSymbol, SortParams } from '../interfaces';
 
 type SetUpdateTickersPayload = Map<string, QuoteTicker>;
-export interface SortPayload {
-  field: QuoteTickerFields,
-  type: SortType
-}
 
 interface CreateActionTickerPayload {
   (tickersMap: SetUpdateTickersPayload): ReturnType<PrepareAction<QuoteTicker[]>>;
@@ -30,7 +26,7 @@ const tickersActions = {
     set: createAction<QuoteTickerSymbol[]>('tickers/symbols/set')
   },
   toggleDarkTheme: createAction<void>('tickers/toggle/DarkTheme'),
-  setSortType: createAction<SortPayload>('tickers/sortType/set'),
+  setSortType: createAction<SortParams>('tickers/sortType/set'),
   toggleLimit: createAction<void>('tickers/toggle/limit50'),
 }
 

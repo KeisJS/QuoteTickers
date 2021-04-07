@@ -23,4 +23,9 @@ export interface QuoteTickerMap {
   [tickerSymbol: string]: QuoteTicker
 }
 
+export interface SortParams {
+  field: QuoteTickerFields,
+  type: SortType
+}
+
 export type SortType = 'up' | 'down';
