@@ -17,13 +17,20 @@ export default function QuoteTable() {
     return () => {
       ws.close();
     }
-  }, [dispatch])
+  }, [dispatch]);
+  
+  let data = tickersState.data;
+  
+  if (tickersState.onLimit50) {
+    data = data.slice(0, 49);
+  }
   
   return (
     <QuoteTableView
-      data={ tickersState.data }
+      data={ data }
       previousData={ tickersState.previousData }
       symbolsMap={ tickersState.symbols }
+      themeDark={ tickersState.isDarkTheme }
     />
   )
 }
