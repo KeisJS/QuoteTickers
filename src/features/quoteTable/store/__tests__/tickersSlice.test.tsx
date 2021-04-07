@@ -1,6 +1,7 @@
 import { QuoteTicker } from '../../interfaces';
 import tickersSlice, { initialTickersState } from '../tickersSlice';
-import { getMockQuoteTicker, getMockQuoteTickerSymbol } from '../../utils'
+import { getMockQuoteTicker, getMockQuoteTickerSymbol } from '../../utils';
+import { SortPayload } from '../actions';
 
 describe('Test tickers slice', () => {
   const reducer = tickersSlice.reducer;
@@ -48,7 +49,7 @@ describe('Test tickers slice', () => {
     const testSymbolMock = getMockQuoteTickerSymbol();
     
     expect(
-      reducer({ ...initialTickersState }, tickersSlice.actions.symbols.set([testSymbolMock]))
+      reducer(initialTickersState , tickersSlice.actions.symbols.set([testSymbolMock]))
     )
       .toEqual({
         ...initialTickersState,
@@ -56,5 +57,31 @@ describe('Test tickers slice', () => {
           [testSymbolMock.id]: testSymbolMock
         }
       })
+  });
+  
+  it('Test toggle dark theme', () => {
+    expect(reducer(initialTickersState, tickersSlice.actions.toggleDarkTheme())).toEqual({
+      ...initialTickersState,
+      isDarkTheme: !initialTickersState.isDarkTheme
+    })
+  });
+  
+  it('Test set sort type', () => {
+    const testPayload: SortPayload = {
+      type: 'down',
+      field: 'ask'
+    };
+    
+    expect(reducer(initialTickersState, tickersSlice.actions.setSortType(testPayload))).toEqual({
+      ...initialTickersState,
+      sortType: testPayload
+    })
+  });
+  
+  it('Test toggle limit 50 item', () => {
+    expect(reducer(initialTickersState, tickersSlice.actions.toggleLimit())).toEqual({
+      ...initialTickersState,
+      onLimit50: !initialTickersState.onLimit50
+    })
   })
 })

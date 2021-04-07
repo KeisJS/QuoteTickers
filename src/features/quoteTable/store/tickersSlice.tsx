@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { QuoteTicker, QuoteTickerSymbol } from '../interfaces';
-import tickersActions from './actions';
+import tickersActions, { SortPayload } from './actions';
 
 interface TickersState {
   data: QuoteTicker[],
@@ -9,13 +9,22 @@ interface TickersState {
   },
   symbols: {
     [id: string]: QuoteTickerSymbol
-  }
+  },
+  onLimit50: boolean,
+  sortType: SortPayload,
+  isDarkTheme: boolean
 }
 
 export const initialTickersState: TickersState = {
   data: [],
   previousData: {},
-  symbols: {}
+  symbols: {},
+  onLimit50: true,
+  sortType: {
+    field: 'last',
+    type: 'down'
+  },
+  isDarkTheme: false
 }
 
 const reducer = createReducer(initialTickersState, builder => {
@@ -41,6 +50,15 @@ const reducer = createReducer(initialTickersState, builder => {
       payload.forEach(symbol => {
         symbols[symbol.id] = symbol
       })
+    })
+    .addCase(tickersActions.toggleDarkTheme, (state) => {
+      state.isDarkTheme = !state.isDarkTheme;
+    })
+    .addCase(tickersActions.setSortType, (state, { payload }) => {
+      state.sortType = payload
+    })
+    .addCase(tickersActions.toggleLimit, state => {
+      state.onLimit50 = !state.onLimit50
     })
 });
 
