@@ -1,12 +1,26 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAction, PrepareAction } from '@reduxjs/toolkit';
 import { QuoteTicker, QuoteTickerSymbol } from '../interfaces';
 
 type SetUpdateTickersPayload = Map<string, QuoteTicker>;
 
+interface CreateActionTickerPayload {
+  (tickersMap: SetUpdateTickersPayload): ReturnType<PrepareAction<QuoteTicker[]>>;
+}
+
+function prepareTickersMap(tickersMap: SetUpdateTickersPayload) {
+  const result: QuoteTicker[] = [];
+  
+  tickersMap.forEach(ticker => result.push(ticker));
+  
+  return {
+    payload: result
+  };
+}
+
 const tickersActions = {
   tickers: {
-    set: createAction<SetUpdateTickersPayload>('tickers/set'),
-    update: createAction<SetUpdateTickersPayload>('tickers/update'),
+    set: createAction<CreateActionTickerPayload>('tickers/set', prepareTickersMap),
+    update: createAction<CreateActionTickerPayload>('tickers/update', prepareTickersMap),
   },
   symbols: {
     set: createAction<QuoteTickerSymbol[]>('tickers/symbols/set')

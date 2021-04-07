@@ -3,11 +3,11 @@ import { AppDispatch } from '../../../app/store';
 import { QuoteTicker } from '../interfaces';
 import tickersSlice from '../store/tickersSlice';
 
-const updateInterval = 34; //in ms
+const updateInterval = 42; //in ms
 
 export default function updateTicker(ws: WebSocketApp, dispatch: AppDispatch) {
-  const controlPoint = Date.now();
   const tickerCache = new Map();
+  let controlPoint = Date.now();
   
   ws.addEventListener('message', ({ data }) => {
     const ticker = JSON.parse(data).params as QuoteTicker;
@@ -16,7 +16,7 @@ export default function updateTicker(ws: WebSocketApp, dispatch: AppDispatch) {
     
     if (Date.now() - controlPoint > updateInterval) {
       dispatch(tickersSlice.actions.tickers.update(tickerCache));
-      
+      controlPoint = Date.now();
       tickerCache.clear();
     }
   })

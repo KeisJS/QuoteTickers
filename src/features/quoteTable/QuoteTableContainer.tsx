@@ -17,7 +17,7 @@ export default function QuoteTable() {
     return () => {
       ws.close();
     }
-  }, [])
+  }, [dispatch])
   
   return (
     <QuoteTableView

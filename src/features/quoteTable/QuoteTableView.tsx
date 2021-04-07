@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { QuoteTicker, QuoteTickerSymbol } from './interfaces';
 import quoteTableFields from './tableFields';
 
@@ -13,6 +13,12 @@ export interface QuoteTableViewProps {
   }
 }
 
+interface QuoteTableRow {
+  ticker: QuoteTicker,
+  previousTicker: null | QuoteTicker,
+  symbol: QuoteTickerSymbol,
+}
+
 export const quoteTableClasses = {
   cellValueUp: 'text-success',
   cellValueDawn: 'text-danger',
@@ -20,6 +26,38 @@ export const quoteTableClasses = {
     table: 'table-dark',
   }
 }
+
+const QuoteTableRow = memo(({ ticker, previousTicker, symbol }:QuoteTableRow ) => {
+  return (
+    (
+      <tr key={ ticker.symbol }>
+        { quoteTableFields.map(tableField => {
+          let extClasses = '';
+          let value = ticker[tableField.field];
+        
+          if (tableField.field === 'symbol') {
+            value = `${symbol.baseCurrency} / ${symbol.feeCurrency}`;
+          } else {
+            if (previousTicker !== null) {
+              switch (tableField.compare(ticker, previousTicker)) {
+                case -1:
+                  extClasses = quoteTableClasses.cellValueDawn;
+                  break;
+                case 1:
+                  extClasses = quoteTableClasses.cellValueUp;
+                  break;
+              }
+            }
+          }
+        
+          return (
+            <td key={ tableField.field } className={ extClasses }>{ value }</td>
+          )
+        })}
+      </tr>
+    )
+  )
+})
 
 export default function QuoteTableView({ data, previousData, themeDark, symbolsMap }: QuoteTableViewProps) {
   return (
@@ -32,34 +70,19 @@ export default function QuoteTableView({ data, previousData, themeDark, symbolsM
         </tr>
       </thead>
       <tbody>
-      { data.map(ticker => (
-        <tr key={ ticker.symbol }>
-          { quoteTableFields.map(tableField => {
-            let extClasses = '';
-            let value = ticker[tableField.field];
-            
-            if (tableField.field === 'symbol') {
-              let symbol = symbolsMap[ticker.symbol];
-              value = `${symbol.baseCurrency} / ${symbol.feeCurrency}`;
-            } else {
-              if (previousData[ticker.symbol]) {
-                switch (tableField.compare(ticker, previousData[ticker.symbol])) {
-                  case -1:
-                    extClasses = quoteTableClasses.cellValueDawn;
-                    break;
-                  case 1:
-                    extClasses = quoteTableClasses.cellValueUp;
-                    break;
-                }
-              }
-            }
-            
-            return (
-              <td key={ tableField.field } className={ extClasses }>{ value }</td>
-            )
-          })}
-        </tr>
-      ))}
+      { data.map(ticker => {
+        const previousTicker = previousData[ticker.symbol] || null;
+        const symbol = symbolsMap[ticker.symbol];
+        
+        return (
+          <QuoteTableRow
+            key={ ticker.symbol }
+            ticker={ ticker }
+            previousTicker={ previousTicker }
+            symbol={ symbol }
+          />
+        )
+      })}
       </tbody>
     </table>
   )
