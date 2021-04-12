@@ -38,7 +38,7 @@ describe('Test QuoteTable', () => {
       />
     );
   
-    expect(byText(testTicker.last).query()).toBeInTheDocument();
+    expect(byText(testTicker.last).get()).toBeInTheDocument();
   });
   
   it('Test dark theme', () => {
